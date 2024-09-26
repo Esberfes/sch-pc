@@ -1,4 +1,4 @@
-./System Volume Information
-./Recovery
-./Config.Msi
-./$RECYCLE.BIN
+System Volume Information/**/*
+Recovery/**/*
+Config.Msi
+$RECYCLE.BIN
