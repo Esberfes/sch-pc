@@ -2,3 +2,4 @@ System Volume Information/**/*
 Recovery/**/*
 Config.Msi
 $RECYCLE.BIN
+**/node_modules
