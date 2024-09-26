@@ -1,0 +1,290 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template version="1.0" type="hubwifi">
+
+<!--
+    <diagnoses>
+		<diagnosis id="wo_status_earlylife" reportcode="ot_cerrada_menos10dias" type="warning">
+			<execution source="callcenter" tag="trb|ivr_trb"/>
+			<visualization source="callcenter"/>
+			<technicalcategory id="cat_warning"/>
+			<operationalcategory type="warning"/>
+			<summary>ORDEN TRABAJO RECIENTE</summary>
+			<description>La orden de trabajo ha sido cerrada hace menos de 10 días</description>
+			<result>
+				<expr type="and">
+					<reference id="tst_par_closedate_last10days" role="ots" type="test"/>
+				</expr>
+			</result>
+			<requirement>
+				<expr type="and">
+					<reference id="tst_wo_statusid_ok" role="ots" type="test"/>
+				</expr>
+			</requirement>
+			<messages>
+				<message id="info_par_closedate" severity="info">
+					<body>
+                    <value type="value">Fecha cierre: </value>
+                    <value type="parameter" role="ots">par_closedate</value>
+                    </body>
+                </message>
+            </messages>
+		</diagnosis>
+	</diagnoses>
+-->
+
+	<wificonfiguration>
+        <capable>
+			<result>
+                <expr type="or">                   
+                    <expr type="and">
+                        <expr type="or">                            
+                            <reference id="tst_ots_work_is_ekt" role="ots" type="test"/>
+                            <reference id="tst_ots_work_is_tc" role="ots" type="test"/>
+                            <!-- <reference id="tst_ots_work_is_r" role="ots" type="test"/> -->
+                        </expr>                        
+                        <reference id="tst_bran_sn_or_mac_exists" role="ots" type="test"/>
+                    </expr>
+                    <expr type="and">
+                        <reference id="tst_ots_work_is_ekt" role="ots" type="test" inverse="true"/>
+                        <reference id="tst_ots_work_is_tc" role="ots" type="test" inverse="true"/>
+                        <reference id="tst_template_notfound" role="wifi" type="test" inverse="true"/>
+                        <reference id="tst_brands_mm_yg_gk_sw_pph" role="ots" type="test"/> <!-- NO SUBIR A PROD -->
+                    </expr>     
+                </expr>
+            </result>
+            <messages>
+                <message id="msg_error_no_gekt" severity="error" datatype="text" storable="true">
+                    <body>
+                        <value type="value">La sección Configuración Wi-Fi de Schaman no tiene la capacidad de extraer la información del router debido a que no se encuentra gestionado por ACS.</value>
+                    </body>
+                    <requirement>                        
+                        <expr type="and">
+                            <reference id="tst_ots_work_is_ekt" role="ots" type="test" inverse="true"/>
+                            <reference id="tst_ots_work_is_tc" role="ots" type="test" inverse="true"/>
+                        </expr>   
+                    </requirement>
+                </message>
+                <message id="msg_error_gekt" severity="error" datatype="text" storable="true">
+                    <body>
+                        <value type="value">La sección Configuración Wi-Fi de Schaman no tiene la capacidad de extraer la información del router porque no disponemos de la información del router.</value>
+                    </body>
+                    <requirement>          
+                        <expr type="or">
+                            <reference id="tst_ots_work_is_ekt" role="ots" type="test"/>
+                            <reference id="tst_ots_work_is_tc" role="ots" type="test"/>
+                        </expr>    
+                    </requirement>
+                </message>
+            </messages>
+		</capable>
+		<available>
+            <result>                
+                <expr type="or">                  
+                    <expr type="and">
+                        <expr type="or">                            
+                            <reference id="tst_ots_work_is_ekt" role="ots" type="test"/>
+                            <reference id="tst_ots_work_is_tc" role="ots" type="test"/>
+                            <reference id="tst_brand_mm_or_guuk_ok" role="ots" type="test"/> <!-- NO SUBIR A PROD -->
+                        </expr>                  
+                        <expr type="or">      
+                            <reference id="tst_consulta_datos_wifi_httpcode_gte_200_lt_300" role="wifi" type="test"/>
+                            <!-- <reference id="tst_consulta_datos_wifi5g_httpcode_gte_200_lt_300" role="wifi" type="test"/> -->
+                        </expr>
+                    </expr>
+                    <expr type="and">
+                        <reference id="tst_ots_work_is_ekt" role="ots" type="test" inverse="true"/>
+                        <reference id="tst_ots_work_is_tc" role="ots" type="test" inverse="true"/>
+                        <reference id="tst_template_notfound" role="wifi" type="test" inverse="true"/>
+                        <reference type="test" id="tst_cpe_status_isonline" role="acsav"/>
+                        <reference type="test" id="tst_cpe_info_isupdated" role="wifi"/>
+                    </expr>      
+                </expr>
+            </result>
+            <messages>
+                <message id="msg_error" severity="error" datatype="text" storable="true">
+                    <body>
+                        <value type="value">La sección Configuración Wi-Fi de Schaman no está disponible en este momento. No es posible recuperar la información de las Redes Wi-Fi configuradas en el router del cliente.</value>
+                    </body>
+                </message>
+            </messages>
+		</available>
+        <unifiableglobal>
+            <result>
+                <expr type="and">
+                    <reference type="test" id="tst_routers_no_linked" role="wifi" inverse="true"/>
+                    <expr type="or">
+                        <reference type="test" id="tst_meq_obtenerDatosEquipo_bandsteering_ok" role="wifi"/>
+                        <reference type="test" id="tst_cpe_model_is_GRG-4280us" role="acsav"/>                   
+                    </expr>
+                </expr>
+            </result>
+        </unifiableglobal>
+		<toolrole>wifi</toolrole>
+	</wificonfiguration>
+
+	<conndevicesconfiguration>
+		<capable>
+			<result>
+                <!-- <expr type="and">
+    				<reference id="tst_template_notfound" role="wifi" type="test" inverse="true"/>
+    			</expr> -->                
+                <expr type="or">                   
+                    <expr type="and">
+                        <expr type="or">                            
+                            <reference id="tst_ots_work_is_ekt" role="ots" type="test"/>
+                            <reference id="tst_ots_work_is_tc" role="ots" type="test"/>
+                        </expr>                        
+                        <reference id="tst_bran_sn_or_mac_exists" role="ots" type="test"/>
+                    </expr>
+                    <expr type="and">
+                        <reference id="tst_ots_work_is_ekt" role="ots" type="test" inverse="true"/>
+                        <reference id="tst_ots_work_is_tc" role="ots" type="test" inverse="true"/>
+                        <reference id="tst_template_notfound" role="wifi" type="test" inverse="true"/>
+                    </expr>     
+                </expr>
+            </result>
+            <messages>
+                <message id="msg_error" severity="error" datatype="text" storable="true">
+                    <body>
+                        <value type="value">Dispositivos conectados no tiene la capacidad de extraer la información del router debido no se encuentra gestionado por ACS.</value>
+                    </body>
+                </message>
+            </messages>
+		</capable>
+		<available>
+			<result>
+                <!-- <expr type="and">
+                    <reference id="tst_template_notfound" role="wifi" type="test" inverse="true"/>
+                    <reference type="test" id="tst_cpe_status_isonline" role="acsav"/>
+                </expr> -->                           
+                <expr type="or">                  
+                    <expr type="and">
+                        <expr type="or">                            
+                            <reference id="tst_ots_work_is_ekt" role="ots" type="test"/>
+                            <reference id="tst_ots_work_is_tc" role="ots" type="test"/>
+                        </expr>                  
+                        <expr type="or">      
+                            <reference id="tst_obtener_tabla_arp_httpcode_gte_200_lt_300" role="wifi" type="test"/>
+                            <!-- <reference id="tst_consulta_datos_wifi5g_httpcode_gte_200_lt_300" role="wifi" type="test"/> -->
+                        </expr>
+                    </expr>
+                    <expr type="and">
+                        <reference id="tst_ots_work_is_ekt" role="ots" type="test" inverse="true"/>
+                        <reference id="tst_ots_work_is_tc" role="ots" type="test" inverse="true"/>
+                        <reference id="tst_template_notfound" role="wifi" type="test" inverse="true"/>
+                        <reference type="test" id="tst_cpe_status_isonline" role="acsav"/>
+                        <reference type="test" id="tst_cpe_info_isupdated" role="wifi"/>
+                    </expr>      
+                </expr>
+            </result>
+            <messages>
+                <message id="msg_error" severity="error" datatype="text" storable="true">
+                    <body>
+                        <value type="value">Dispositivos conectados no está disponible en este momento. No es posible recuperar la información de los dispostivos conectados. </value>
+                    </body>
+                </message>
+            </messages>
+		</available>
+		<toolrole>wifi</toolrole>
+	</conndevicesconfiguration>
+
+	<svaconfiguration>
+		<capable>
+            <result>
+    			<expr type="and">
+    				<reference type="test" role="ots" id="tst_resource_ims"/>
+    			</expr>
+            </result>
+            <messages>
+                <message id="msg_error" severity="error" datatype="text" storable="true">
+                    <body>
+                        <value type="value">Configuración SVAs no está disponible debido a que el cliente no dispone de servicio de voz fijo. </value>
+                    </body>
+                </message>
+            </messages>
+		</capable>
+		<available>
+    		<result>
+                <expr type="and">
+    				<reference type="test" role="ots" id="tst_resource_ims"/>
+    			</expr>
+            </result>
+            <messages>
+                <message id="msg_error" severity="error" datatype="text" storable="true">
+                    <body>
+                        <value type="value">Configuración SVAs no está disponible debido a que el cliente no dispone de servicio de voz fijo. </value>
+                    </body>
+                </message>
+            </messages>
+		</available>
+		<toolrole>ims</toolrole>
+	</svaconfiguration>
+
+
+ 	<!--<proofs>
+ 		&lt;!&ndash; pruebas conectividad rapida en el movil &ndash;&gt;
+        <proof id="prf_wifitools_available">
+            <expr type="or">
+                <expr type="and">
+                    <reference type="test" id="tst_wificapabilities_istag" role="acsav"/>
+                    <reference type="test" id="tst_wifi_fastcheck_available" role="acsav"/>
+                </expr>
+                <expr type="or">
+                    <reference type="test" id="tst_wificapabilities_istag" role="acsav" inverse="true"/>
+                    <expr type="and">
+                        <reference type="test" id="tst_template_notfound" role="acsav" inverse="true"/>
+                        <reference type="test" id="tst_cpe_status_isonline" role="acsav"/>
+                        <reference type="test" id="tst_cpe_info_isupdated" role="acsav"/>
+                    </expr>
+                </expr>
+            </expr>
+        </proof>
+        &lt;!&ndash; Se comprueba que el CPE está "available" de una manera "rápida". Para ello se hace una
+        llamada especifica a connection request sync (CRS2) fuera del ciclo normal del agente. Se
+        comprueba que estamos dentro del trb ejecutado en la llamada al WS wificapabilities &ndash;&gt;
+        <proof id="prf_wifitools_available_fastcheck">
+            <expr type="and">
+                <reference type="test" id="tst_wificapabilities_istag" role="acsav"/>
+                <reference type="test" id="tst_wifi_fastcheck_available" role="acsav"/>
+            </expr>
+        </proof>
+
+        &lt;!&ndash; Se comprueba que el CPE está "available" de una manera "lenta". Para ello se hace una
+        llamada especifica a connection request sync (CRS2) fuera del ciclo normal del agente. Se
+        comprueba que NO estamos dentro del trb ejecutado en la llamada al WS wificapabilities &ndash;&gt;
+        <proof id="prf_wifitools_available_slowcheck">
+            <expr type="or">
+                <reference type="test" id="tst_wificapabilities_istag" role="acsav" inverse="true"/>
+                <reference type="proof" id="prf_cpe_available_compatible" role="acsav"/>
+            </expr>
+        </proof>
+
+        <proof id="prf_cpe_available_compatible">
+        	<expr type="and">
+        		<reference type="test" id="tst_template_notfound" role="acsav" inverse="true"/>
+                <reference type="test" id="tst_cpe_status_isonline" role="acsav"/>
+                <reference type="test" id="tst_cpe_info_isupdated" role="acsav"/>
+            </expr>
+        </proof>
+
+
+		&lt;!&ndash;<proof id="prf_event_acs_post_logistic">
+        	<expr type="and">
+                <reference type="test" id="tst_logistic_event_received" role="proactive"/>
+                <reference type="test" id="tst_acs_post_logistic" role="acsav"/>
+            </expr>
+        </proof>&ndash;&gt;
+
+
+    </proofs>-->
+
+
+<!--
+1. El role del q viene el wifi
+2. Estaba el capable y available como diagnósticos
+3. El nombre del parámetro donde se sacan los datos
+4. Las acciones
+-->
+
+
+</template>

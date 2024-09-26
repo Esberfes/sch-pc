@@ -1,0 +1,3031 @@
+<?xml version='1.0' encoding='UTF-8'?>           
+<template role="ims" version="2.0" type="role">
+
+    <!-- ##################################################################### -->
+    <!-- version 2.0                                                           -->
+    <!-- migramos endpoint voiceconfig a nuevo getFixedConfig a traves de      -->
+    <!-- api gw MM MSA                                                         -->
+    <!-- version 1.11                                                          -->
+    <!-- parametros a mostrar en V9.8 Schaman en techview igual a ifused       -->
+    <!-- versiion 1.10                                                         -->
+    <!--  - añadido tener en cuenta cuando es errCode 9 u 11                   -->
+    <!-- versiion 1.9                                                          -->
+    <!--  - Cambios en test cpe_registrado y tst_acs_ims                       -->
+    <!-- versiion 1.7                                                          -->
+    <!--  - Determina si hay error con errCode en vez de httpCode              -->
+    <!-- version 1.6                                                           -->
+    <!--  - Arreglado error parameer en vez de parameter en table svas         -->
+    <!-- version 1.5                                                           -->
+    <!--  - Añadidos parámetros y adaptación nuevo endpoint                    -->
+    <!-- version 1.4                                                           --> 
+    <!--  - Ajustes parametors tech view                                       --> 
+    <!-- Version 1.3                                                           -->
+    <!--  - Ponemos todos los mensajes con platform callcenter                 -->
+    <!-- Version 1.2                                                           -->
+    <!--  - Version de partida                                                 -->
+    <!-- ##################################################################### -->
+
+
+
+    <parameters>
+
+        <parameter id="par_phone_number" type="value" techview="ifused" name="Telefono">
+            <contents>
+                <value type="parameter" role="ots">par_phone_number</value>
+            </contents>
+        </parameter>
+
+        <parameter id="par_errcode">
+            <contents>
+                <value type="infosource_value" infosource="ims" endpointid="getFixedConfig">_errCode</value>
+            </contents>
+        </parameter>
+
+        <parameter id="par_http_code">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">_httpCode</value>
+            </contents>
+        </parameter>
+
+        <parameter id="par_errdescription">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">_errDesc</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_voiceconfig_code_error">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">codigo</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_xena_status">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">XenaStaus</value>
+            </contents>            
+            <sequence>
+                <operation type="replace_pattern">
+                	<args><arg><value type="value">^T$@to@T: Bloqueado</value></arg></args>
+                </operation>
+            </sequence>
+        </parameter>
+
+        <parameter id="par_exists_ims">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">ExistsIMS</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_sip_password_status">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">SipPasswordStatus</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_prov_code">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">ProvCode</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_cpe_registered" techview="ifused" name="REGISTRO CPE en IMS">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">CpeRegistered</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_portability" techview="ifused" name="Operador Numeración">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">Portability</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_operator_acs">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">OperatorACS</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_operator_ims">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">OperatorIMS</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_primary_outbound_acs">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">PrimaryOutboundACS</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_primary_outbound_ims">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">PrimaryOutboundIMS</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_secondary_outbound_acs">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">SecondaryOutboundACS</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_secondary_outbound_ims">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">SecondaryOutboundIMS</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_registrar_server_acs">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">RegistrarServerACS</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_registrar_server_ims">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">RegistrarServerIMS</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_sip_username_acs">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">SipUsernameACS</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_sip_username_ims">
+            <contents>
+            	<value type="infosource_value" infosource="ims" endpointid="getFixedConfig">SipUsernameIMS</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_sip_password_ims">
+            <contents>
+                <value type="infosource_value" infosource="ims" endpointid="getFixedConfig">SipPasswordIMS</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_sip_password_acs">
+            <contents>
+                <value type="infosource_value" infosource="ims" endpointid="getFixedConfig">SipPasswordACS</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_acs_vs_ims_table" type="table" name="Tabla ACS/IMS" techview="ifused">
+          <contents>
+            	<value type="value">Parametro,ACS,IMS;Operator,</value>
+                <value type="parameter">par_operator_acs</value>
+				<value type="value">,</value>
+				<value type="parameter">par_operator_ims</value>
+				<value type="value">;PrimaryOutbound,</value>
+                <value type="parameter">par_primary_outbound_acs</value>                      	
+                <value type="value">,</value>   
+				<value type="parameter">par_primary_outbound_ims</value>
+                <value type="value">;SecondaryOutbound,</value>   
+				<value type="parameter">par_secondary_outbound_acs</value>
+                <value type="value">,</value>   
+				<value type="parameter">par_secondary_outbound_ims</value>
+                <value type="value">;RegistrarServer,</value>                             
+				<value type="parameter">par_registrar_server_acs</value>
+                <value type="value">,</value>   
+				<value type="parameter">par_registrar_server_ims</value>
+                <value type="value">;SipUsername,</value>   
+				<value type="parameter">par_sip_username_acs</value>
+                <value type="value">,</value>   
+				<value type="parameter">par_sip_username_ims</value>
+          </contents>
+          <sequence>
+            <operation type="row_delimiter">
+            	<args><arg><value type="value">;</value></arg></args>
+            </operation>
+            <operation type="column_delimiter">
+            	<args><arg><value type="value">,</value></arg></args>
+            </operation>
+          </sequence>
+        </parameter>
+
+        <parameter id="par_ims_estado_svas_error" type="value">
+            <contents>
+                <value type="infosource_value" infosource="ims" endpointid="getFixedConfig">sva.codigo</value>
+            </contents>        
+        </parameter>
+
+        <parameter id="par_svas_table" type="table">
+            <contents>
+                <value type="infosource_table" infosource="ims" endpointid="getFixedConfig">sva.servicio.</value>
+            </contents>            
+            <sequence>
+                <operation type="header_selector">
+                	<args><arg><value type="value">clave;valor</value></arg></args>
+                </operation>
+                <operation type="column_left">
+                	<args><arg><value type="value">clave</value></arg></args>
+                </operation>
+                <operation type="column_right">
+                	<args><arg><value type="value">name</value></arg></args>
+                </operation>
+                <operation type="join">
+                	<args><arg><value type="parameter">par_sva_translate_table</value></arg></args>
+                </operation>
+                <operation type="header_selector">
+                	<args><arg><value type="value">clave;nombre;valor</value></arg></args>
+                </operation>
+                <operation type="column_index">
+                	<args><arg><value type="value">3</value></arg></args>
+                </operation>
+                <operation type="replace_pattern">
+                	<args><arg><value type="value">^1$@to@Activado</value></arg></args>
+                </operation>
+                <operation type="replace_pattern">
+                	<args><arg><value type="value">^0$@to@Desactivado</value></arg></args>
+                </operation>
+            </sequence>
+        </parameter>
+
+        <parameter id="par_ims_estado_svas_forwarding" type="table">
+          <contents>
+            <value type="parameter">par_svas_table</value>
+          </contents>  
+          <sequence>
+            <operation type="column_index">
+            	<args><arg><value type="value">1</value></arg></args>
+            </operation>
+            <operation type="ignore_header">
+            	<args><arg><value type="value">true</value></arg></args>
+            </operation>
+            <operation type="column_contain">
+            	<args><arg><value type="value">Forward</value></arg></args>
+            </operation>
+            <operation type="header_selector">
+            	<args><arg><value type="value">nombre;valor</value></arg></args>
+            </operation>
+            <operation type="first_row">
+            	<args><arg><value type="value">2</value></arg></args>
+            </operation>
+          </sequence>
+        </parameter>
+
+        <!-- Parametro para contar los SVA activos de tipo desvio -->
+
+        <parameter id="par_ims_estado_svas_forwarding_active" type="value">
+          <contents>
+            <value type="parameter">par_ims_estado_svas_forwarding</value>
+          </contents>  
+          <sequence>
+            <operation type="column_index">
+            	<args><arg><value type="value">2</value></arg></args>
+            </operation>
+            <operation type="column_not_contain">
+            	<args><arg><value type="value">Desactivado</value></arg></args>
+            </operation>
+            <operation type="number_of_rows"/>
+          </sequence>
+        </parameter>
+
+        <parameter id="par_svas_table_display" type="table" name="Estado de los Servicios" techview="ifused">
+          <contents>
+            <value type="parameter">par_svas_table</value>
+          </contents>  
+          <sequence>
+            <operation type="column_index">
+                <args><arg><value type="value">1</value></arg></args>
+            </operation>
+            <operation type="column_not_contain">
+                <args><arg><value type="value">ClientCode</value></arg></args>
+            </operation>    
+            <operation type="header_selector">
+                <args><arg><value type="value">nombre;valor</value></arg></args>
+            </operation>
+            <operation type="first_row">
+                <args><arg><value type="value">2</value></arg></args>
+            </operation>
+          </sequence>
+        </parameter>
+
+        <parameter id="par_svas_desvio_incondicional" type="table">
+          <contents>
+            <value type="parameter">par_svas_table_display</value>
+          </contents>
+          <sequence>
+            <operation type="column_index">
+                <args><arg><value type="value">1</value></arg></args>
+            </operation>
+            <operation type="column_equal">
+                <args><arg><value type="value">Desvío incondicional</value></arg></args>
+            </operation>
+            <operation type="add_header">
+                <args><arg><value type="value">SVA;Valor</value></arg></args>
+            </operation>
+          </sequence>
+        </parameter>
+
+        <parameter id="par_svas_desvio_incondicional_valor" type="value">
+          <contents>
+            <value type="parameter">par_svas_desvio_incondicional</value>
+          </contents>
+          <sequence>
+            <operation type="first_row">
+                <args><arg><value type="value">2</value></arg></args>
+            </operation>
+            <operation type="column_selector">
+                <args><arg><value type="value">2</value></arg></args>
+            </operation>
+          </sequence>
+        </parameter>
+
+        <!-- Valor del campo 'Buzón Voz' = Activado o Desactivado -->
+        <parameter id="par_svas_table_display_buzon_voz" type="value">
+          <contents>
+            <value type="parameter">par_svas_table_display</value>
+          </contents>
+          <sequence>
+            <operation type="column_index">
+                <args><arg><value type="value">1</value></arg></args>
+            </operation>
+            <operation type="column_equal">
+                <args><arg><value type="value">Buzón Voz</value></arg></args>
+            </operation>
+            <operation type="column_selector">
+                <args><arg><value type="value">2</value></arg></args>
+            </operation>
+          </sequence>
+        </parameter>
+
+        <!-- Valor del campo 'Desvío si no contesta' = Activado o Desactivado -->
+        <parameter id="par_svas_table_display_desvio_si_no_contesta" type="value">
+          <contents>
+            <value type="parameter">par_svas_table_display</value>
+          </contents>
+          <sequence>
+            <operation type="column_index">
+                <args><arg><value type="value">1</value></arg></args>
+            </operation>
+            <operation type="column_equal">
+                <args><arg><value type="value">Desvío si no contesta</value></arg></args>
+            </operation>
+            <operation type="column_selector">
+                <args><arg><value type="value">2</value></arg></args>
+            </operation>
+          </sequence>
+        </parameter>
+
+        <!-- Valor del campo 'Desvío incondicional' = Activado o Desactivado -->
+        <parameter id="par_svas_table_display_desvio_incondicional" type="value">
+          <contents>
+            <value type="parameter">par_svas_table_display</value>
+          </contents>
+          <sequence>
+            <operation type="column_index">
+                <args><arg><value type="value">1</value></arg></args>
+            </operation>
+            <operation type="column_equal">
+                <args><arg><value type="value">Desvío incondicional</value></arg></args>
+            </operation>
+            <operation type="column_selector">
+                <args><arg><value type="value">2</value></arg></args>
+            </operation>
+          </sequence>
+        </parameter>
+
+        <!-- Valor del campo 'Desvío si ocupado' = Activado o Desactivado -->
+        <parameter id="par_svas_table_display_desvio_si_ocupado" type="value">
+          <contents>
+            <value type="parameter">par_svas_table_display</value>
+          </contents>
+          <sequence>
+            <operation type="column_index">
+                <args><arg><value type="value">1</value></arg></args>
+            </operation>
+            <operation type="column_equal">
+                <args><arg><value type="value">Desvío si ocupado</value></arg></args>
+            </operation>
+            <operation type="column_selector">
+                <args><arg><value type="value">2</value></arg></args>
+            </operation>
+          </sequence>
+        </parameter>
+
+        <parameter id="par_ims_estado_svas_other" type="table">
+          <contents>
+            <value type="parameter">par_svas_table</value>
+          </contents>  
+          <sequence>
+            <operation type="column_index">
+            	<args><arg><value type="value">1</value></arg></args>
+            </operation>
+            <operation type="column_not_contain">
+            	<args><arg><value type="value">Forward</value></arg></args>
+            </operation>
+            <operation type="column_not_contain">
+            	<args><arg><value type="value">ClientCode</value></arg></args>
+            </operation>
+            <operation type="column_not_contain">
+            	<args><arg><value type="value">Temporary</value></arg></args>
+            </operation>
+            <operation type="column_not_contain">
+            	<args><arg><value type="value">Default</value></arg></args>
+            </operation>
+            <operation type="header_selector">
+            	<args><arg><value type="value">nombre;valor</value></arg></args>
+            </operation>
+            <operation type="first_row">
+            	<args><arg><value type="value">2</value></arg></args>
+            </operation>
+          </sequence>
+        </parameter>
+
+        <!-- Parametro para contar los SVA activos que contengan "No molestar" o "Bloqueo" en su descripción -->
+
+        <parameter id="par_ims_estado_svas_other_active" type="value">
+          <contents>
+            <value type="parameter">par_ims_estado_svas_other</value>
+          </contents>  
+          <sequence>
+            <operation type="column_index">
+            	<args><arg><value type="value">2</value></arg></args>
+            </operation>
+            <operation type="column_not_contain">
+            	<args><arg><value type="value">Desactivado</value></arg></args>
+            </operation>
+            <operation type="column_index">
+            	<args><arg><value type="value">1</value></arg></args>
+            </operation>
+            <operation type="replace_pattern">
+            	<args><arg><value type="value">^No molestar$@to@BINGO</value></arg></args>
+            </operation>
+            <operation type="replace_pattern">
+            	<args><arg><value type="value">Bloqueo@to@BINGO</value></arg></args>
+            </operation>
+            <operation type="column_contain">
+            	<args><arg><value type="value">BINGO</value></arg></args>
+            </operation>
+            <operation type="number_of_rows"/>
+          </sequence>
+        </parameter>
+
+        <parameter id="par_hard_block_names" type="list">
+            <contents>
+            	<value type="value">DefaultBlock;TemporaryBlock</value>
+            </contents>            
+            <sequence>
+                <operation type="column_delimiter">
+                	<args><arg><value type="value">;</value></arg></args>
+                </operation>
+            </sequence>
+        </parameter>
+
+        <parameter id="par_ims_estado_svas_hard_block" type="table">
+          <contents>
+            <value type="parameter">par_svas_table</value>
+          </contents>  
+          <sequence>
+            <operation type="column_index">
+            	<args><arg><value type="value">1</value></arg></args>
+            </operation>
+            <operation type="ignore_header">
+            	<args><arg><value type="value">true</value></arg></args>
+            </operation>
+            <operation type="column_contains_in_param">
+            	<args><arg><value type="parameter">par_hard_block_names</value></arg></args>
+            </operation>
+            <operation type="header_selector">
+            	<args><arg><value type="value">nombre;valor</value></arg></args>
+            </operation>
+            <operation type="first_row">
+            	<args><arg><value type="value">2</value></arg></args>
+            </operation>
+          </sequence>
+        </parameter>
+
+        <!-- Parametro para contar los SVA activos de tipo bloqueo financiero o temporal -->
+
+        <parameter id="par_ims_estado_svas_hardblock_active" type="value">
+          <contents>
+            <value type="parameter">par_ims_estado_svas_hard_block</value>
+          </contents>  
+          <sequence>
+            <operation type="column_index">
+            	<args><arg><value type="value">2</value></arg></args>
+            </operation>
+            <operation type="column_not_contain">
+            	<args><arg><value type="value">Desactivado</value></arg></args>
+            </operation>
+            <operation type="number_of_rows"/>
+
+          </sequence>
+        </parameter>
+
+        <parameter id="par_sva_translate_table" type="table">
+            <contents>
+                <value type="infosource_table" infosource="lookup" endpointid="sva_translate">.</value>
+            </contents>
+            <sequence>
+                <operation type="transpose"/>
+                <operation type="column_index">
+                    <args><arg><value type="value">1</value></arg></args>
+                </operation>
+                <operation type="column_not_in_param">
+                    <args><arg><value type="parameter" role="ots">par_errores</value></arg></args>
+                </operation>
+                <operation type="transpose"/>  
+            </sequence>
+        </parameter>
+
+        <parameter id="par_svas_table_root" type="table">
+            <contents>
+                <value type="infosource_table" infosource="ims" endpointid="getFixedConfig">sva.servicio.</value>
+            </contents>
+            <sequence>
+                <operation type="header_selector">
+                    <args><arg><value type="value">clave;valor;valor</value></arg></args>
+                </operation>
+
+                <operation type="first_row">
+                    <args><arg><value type="value">2</value></arg></args>
+                </operation>
+                <operation type="add_header">
+                    <args><arg><value type="value">id;state;substate</value></arg></args>
+                </operation>
+
+                <operation type="column_index">
+                    <args><arg><value type="value">3</value></arg></args>
+                </operation>
+                <operation type="ignore_header">
+                    <args><arg><value type="value">true</value></arg></args>
+                </operation>
+                <operation type="replace_pattern">
+                    <args><arg><value type="value">.*@to@</value></arg></args>
+                </operation>
+                <operation type="column_index">
+                    <args><arg><value type="value">2</value></arg></args>
+                </operation>
+                <operation type="replace_pattern">
+                    <args><arg><value type="value">^(?!0).*$@to@true</value></arg></args>
+                </operation>
+                <operation type="replace_pattern">
+                    <args><arg><value type="value">^0$@to@false</value></arg></args>
+                </operation>
+            </sequence>
+        </parameter>
+
+        <parameter id="par_voice_svas" type="table">
+          <contents>
+                <value type="infosource_table" infosource="lookup" endpointid="svas_to_table">.</value>
+            </contents>
+            <sequence>
+                <operation type="transpose"/>
+                <operation type="column_index">
+                    <args><arg><value type="value">1</value></arg></args>
+                </operation>
+                <operation type="column_not_in_param">
+                    <args><arg><value type="parameter" role="ots">par_errores</value></arg></args>
+                </operation>
+                <operation type="transpose"/>  
+            <operation type="column_left">
+                  <args><arg><value type="value">id</value></arg></args>
+                </operation>
+            <operation type="column_right">
+                  <args><arg><value type="value">id</value></arg></args>
+                </operation>
+            <operation type="join">
+                  <args><arg><value type="parameter">par_svas_table_root</value></arg></args>
+                </operation>
+            <operation type="header_selector">
+                  <args><arg><value type="value">id;state;substate;name;detail;grouper;type</value></arg></args>
+                </operation>
+          </sequence>
+        </parameter>
+
+        <!-- parametros listados a mostrar en SVAs -->
+
+        <parameter id="par_IncomingCallNumBlock_list" type="list">
+            <contents>
+                <value type="infosource_table" infosource="ims" endpointid="getFixedConfig">sva.servicio.</value>
+            </contents>
+            <sequence>
+                <operation type="header_selector">
+                    <args><arg><value type="value">clave;valor</value></arg></args>
+                </operation>
+                <operation type="column_index">
+                    <args><arg><value type="value">1</value></arg></args>
+                </operation>
+                <operation type="column_contain">
+                    <args><arg><value type="value">IncomingCallNumBlock</value></arg></args>
+                </operation>
+                <operation type="add_header">
+                    <args><arg><value type="value">clave;valor</value></arg></args>
+                </operation>
+                <operation type="header_selector">
+                    <args><arg><value type="value">valor</value></arg></args>
+                </operation>
+                <operation type="first_row">
+                    <args><arg><value type="value">2</value></arg></args>
+                </operation>
+                <operation type="column_delimiter">
+                  <args><arg><value type="value">\|</value></arg></args>
+                </operation>
+                <operation type="replace_pattern">
+                    <args><arg><value type="value">^0*$@to@</value></arg></args>
+                </operation>
+            </sequence>
+        </parameter>
+
+        <parameter id="par_IncomingCallNumBlock_table" type="table">
+            <contents>
+                <value type="parameter">par_IncomingCallNumBlock_list</value>
+            </contents>
+            <sequence>
+                <operation type="row_delimiter">
+                    <args><arg><value type="value">\|</value></arg></args>
+                </operation>
+            </sequence>
+        </parameter>
+
+        <parameter id="par_OutgoingCallNumBlock_list" type="list">
+            <contents>
+                <value type="infosource_table" infosource="ims" endpointid="getFixedConfig">sva.servicio.</value>
+            </contents>
+            <sequence>
+                <operation type="header_selector">
+                    <args><arg><value type="value">clave;valor</value></arg></args>
+                </operation>
+                <operation type="column_index">
+                    <args><arg><value type="value">1</value></arg></args>
+                </operation>
+                <operation type="column_contain">
+                    <args><arg><value type="value">OutgoingCallNumBlock</value></arg></args>
+                </operation>
+                <operation type="add_header">
+                    <args><arg><value type="value">clave;valor</value></arg></args>
+                </operation>
+                <operation type="header_selector">
+                    <args><arg><value type="value">valor</value></arg></args>
+                </operation>
+                <operation type="first_row">
+                    <args><arg><value type="value">2</value></arg></args>
+                </operation>
+                <operation type="column_delimiter">
+                  <args><arg><value type="value">\|</value></arg></args>
+                </operation>
+                <operation type="replace_pattern">
+                    <args><arg><value type="value">^0*$@to@</value></arg></args>
+                </operation>
+            </sequence>
+        </parameter>
+
+        <parameter id="par_OutgoingCallNumBlock_table" type="table">
+            <contents>
+                <value type="parameter">par_OutgoingCallNumBlock_list</value>
+            </contents>
+            <sequence>
+                <operation type="row_delimiter">
+                    <args><arg><value type="value">\|</value></arg></args>
+                </operation>
+            </sequence>
+        </parameter>
+
+        <parameter id="par_CallForwardNoanswer_list" type="list">
+            <contents>
+                <value type="infosource_table" infosource="ims" endpointid="getFixedConfig">sva.servicio.</value>
+            </contents>
+            <sequence>
+                <operation type="header_selector">
+                    <args><arg><value type="value">clave;valor</value></arg></args>
+                </operation>
+                <operation type="column_index">
+                    <args><arg><value type="value">1</value></arg></args>
+                </operation>
+                <operation type="column_contain">
+                    <args><arg><value type="value">CallForwardNoanswer</value></arg></args>
+                </operation>
+                <operation type="add_header">
+                    <args><arg><value type="value">clave;valor</value></arg></args>
+                </operation>
+                <operation type="header_selector">
+                    <args><arg><value type="value">valor</value></arg></args>
+                </operation>
+                <operation type="first_row">
+                    <args><arg><value type="value">2</value></arg></args>
+                </operation>
+            </sequence>
+        </parameter>
+
+        <parameter id="par_CallForwardInconditional_list" type="list">
+            <contents>
+                <value type="infosource_table" infosource="ims" endpointid="getFixedConfig">sva.servicio.</value>
+            </contents>
+                <sequence>
+                <operation type="header_selector">
+                    <args><arg><value type="value">clave;valor</value></arg></args>
+                </operation>
+                <operation type="column_index">
+                    <args><arg><value type="value">1</value></arg></args>
+                </operation>
+                <operation type="column_contain">
+                    <args><arg><value type="value">CallForwardInconditional</value></arg></args>
+                </operation>
+                <operation type="add_header">
+                    <args><arg><value type="value">clave;valor</value></arg></args>
+                </operation>
+                <operation type="header_selector">
+                    <args><arg><value type="value">valor</value></arg></args>
+                </operation>
+                <operation type="first_row">
+                    <args><arg><value type="value">2</value></arg></args>
+                </operation>
+            </sequence>
+        </parameter>
+
+        <parameter id="par_CallForwardBusy_list" type="list">
+            <contents>
+                <value type="infosource_table" infosource="ims" endpointid="getFixedConfig">sva.servicio.</value>
+            </contents>
+            <sequence>
+                <operation type="header_selector">
+                    <args><arg><value type="value">clave;valor</value></arg></args>
+                </operation>
+                <operation type="column_index">
+                    <args><arg><value type="value">1</value></arg></args>
+                </operation>
+                <operation type="column_contain">
+                    <args><arg><value type="value">CallForwardBusy</value></arg></args>
+                </operation>
+                <operation type="add_header">
+                    <args><arg><value type="value">clave;valor</value></arg></args>
+                </operation>
+                <operation type="header_selector">
+                    <args><arg><value type="value">valor</value></arg></args>
+                </operation>
+                <operation type="first_row">
+                    <args><arg><value type="value">2</value></arg></args>
+                </operation>
+            </sequence>
+        </parameter>
+
+        <!-- parámetros para forzar lanzamiento acciones desde proactivo -->
+
+        <parameter id="par_checkradius_wa" type="value">
+            <contents>
+                <value type="infosource_value" infosource="acs" datalinkid="checkradius_wa" endpointid="acs_checkradius_wa">_httpcode</value>
+            </contents>
+        </parameter>
+        <parameter id="par_reconfiguresip_wa" type="value">
+            <contents>
+                <value type="infosource_value" infosource="acs" datalinkid="reconfiguresip_wa" endpointid="acs_reconfiguresip_wa">_httpcode</value>
+            </contents>
+        </parameter>
+        <parameter id="par_setproperties_wa" type="value">
+            <contents>
+                <value type="infosource_value" infosource="acs" datalinkid="setproperties_wa" endpointid="acs_ims_setproperties_wa">_httpcode</value>
+            </contents>
+        </parameter>
+
+        <parameter id="par_get_sva_config_block_and_forward_code" type="value">
+            <contents>
+                <value type="infosource_value" infosource="ims" endpointid="set_sva_configuration_block_and_forward">codigo</value>
+            </contents>
+        </parameter>
+
+        <parameter id="par_get_sva_configuration_code" type="value">
+            <contents>
+                <value type="infosource_value" infosource="ims" endpointid="set_sva_configuration">codigo</value>
+            </contents>
+        </parameter>
+
+    </parameters>
+
+    <tests>
+        <test id="tst_template">
+            <expr type="and" result="true"/>
+        </test>
+
+        <test id="tst_ims_infosources_isok">
+        	<expr type="and">
+                <reference type="check" id="chk_errcode_ok"/>
+                <reference type="check" id="chk_http_code_ok"/>
+            </expr>
+        </test>
+
+        <test id="tst_ims_infosources_isko">
+            <expr type="or">
+                <reference type="check" id="chk_errcode_ko"/>
+                <reference type="check" id="chk_http_code_ko"/>
+            </expr>
+        </test>
+
+        <test id="tst_xena_status_ok">
+        	<expr type="and">
+                <reference id="chk_xena_status_ok" type="check"/>
+            </expr>
+        </test>
+
+        <test id="tst_ims_service_error">
+        	<expr type="or">
+                <reference type="check" id="chk_errcode_ok" inverse="true"/>
+            </expr>        
+        </test>
+
+        <test id="tst_ims_status_ko">
+        	<expr type="and">
+                <reference type="check" id="chk_voiceconfig_ko"/>
+            </expr>
+        </test>
+
+        <test id="tst_sip_password_status_ok">
+        	<expr type="and">
+                <reference type="check" id="chk_sip_password_status_ok"/>
+            </expr>
+        </test>
+
+        <test id="tst_prov_code_notspaced">
+        	<expr type="and">
+                <reference type="check" id="chk_prov_code_notspaced"/>
+            </expr>
+        </test>
+
+        <test id="tst_acs_vs_ims">
+        	<expr type="and">
+                <!--<reference type="check" id="chk_operator_acs_vs_ims"/>-->
+                <reference type="check" id="chk_primary_outbound_acs_vs_ims"/>
+                <reference type="check" id="chk_secondary_outbound_acs_vs_ims"/>
+                <reference type="check" id="chk_registrar_server_acs_vs_ims"/>
+                <reference type="check" id="chk_sip_username_acs_vs_ims"/>
+                <reference type="check" id="chk_sip_password_acs_vs_ims"/>
+            </expr>
+        </test>
+
+
+        <!-- TODO : Meter acción resetear CPE --> 
+        <test id="tst_cpe_registered">
+            <expr type="and">
+                <reference type="check" id="chk_cpe_registered"/>
+            </expr>
+        </test>
+
+        <test id="tst_cpe_registered_ko">
+            <expr type="and">
+                <reference type="check" id="chk_cpe_registered_ko"/>
+            </expr>
+        </test>
+
+        <test id="tst_ims_estado_svas_ko">
+        	<expr type="and">
+                <reference type="check" id="chk_ims_svas_http_errorcode_ko"/> 
+            </expr>
+        </test>
+
+        <test id="tst_ims_svas_isok">
+        	<expr type="and">
+                <reference type="check" id="chk_ims_svas_httpcode_ok"/>
+            </expr>
+        </test>
+
+        <test id="tst_ims_estado_svas_desvios_activo">
+        	<expr type="and">
+                <reference type="test" id="tst_ims_estado_svas_ko" inverse="true" />               
+                <reference type="check" id="chk_ims_estado_svas_desvios_activo" />
+            </expr>
+        </test>
+
+        <test id="tst_ims_estado_svas_bloqueo_activo">
+        	<expr type="and">
+                <reference type="test" id="tst_ims_estado_svas_ko" inverse="true" />                 
+                <reference type="check" id="chk_ims_estado_svas_bloqueo_activo" />
+            </expr>
+        </test>
+
+        <test id="tst_ims_estado_svas_bloqueo_duro_activo">
+        	<expr type="and">
+                <reference type="test" id="tst_ims_estado_svas_ko" inverse="true" />                 
+                <reference type="check" id="chk_ims_estado_svas_bloqueo_duro_activo" />
+            </expr>
+        </test>
+
+        <test id="tst_exists_ims">
+        	<expr type="and">
+                <reference type="check" id="chk_exists_ims"/>
+            </expr>
+        </test>
+
+        <test id="tst_not_portated">
+        	<expr type="and">
+                <reference type="check" id="chk_portability" inverse="true"/>
+            </expr>
+        </test>
+
+        <test id="tst_number_hasbeen_portated">
+            <expr type="and">
+                <reference type="check" id="chk_portability"/>
+            </expr>
+        </test>
+
+        <!-- test información incompleta IMS a pesar de haber conectividad -->
+        <test id="tst_getfixedconfig_info_partial">
+            <expr type="and">
+                <reference type="test" id="tst_ims_infosources_isok"/>
+                <expr type="or">
+                    <reference type="check" id="chk_portability_is_unknown"/>
+                    <reference type="check" id="chk_registered_is_unknown"/>
+                    <reference type="check" id="chk_provcode_is_unknown"/>
+                    <reference type="check" id="chk_passwordstatus_is_unknown"/>
+                    <reference type="check" id="chk_exists_is_unknown"/>
+                </expr>
+            </expr>
+        </test>
+
+        <test id="tst_getfixedconfig_info_partial_registered">
+            <expr type="and">
+                <reference type="test" id="tst_ims_infosources_isok"/>
+                <reference type="check" id="chk_registered_is_unknown"/>
+            </expr>
+        </test>
+
+        <test id="tst_getfixedconfig_info_partial_passtat">
+            <expr type="and">
+                <reference type="test" id="tst_ims_infosources_isok"/>
+                <reference type="check" id="chk_passwordstatus_is_unknown"/>
+            </expr>
+        </test>
+
+        <test id="tst_getfixedconfig_info_partial_provcode">
+            <expr type="and">
+                <reference type="test" id="tst_ims_infosources_isok"/>
+                <reference type="check" id="chk_provcode_is_unknown"/>
+            </expr>
+        </test>
+
+        <test id="tst_getfixedconfig_info_partial_table">
+            <expr type="and">
+                <reference type="test" id="tst_ims_infosources_isok"/>
+                <expr type="or">
+                    <reference type="check" id="chk_passwordacs_is_unknown"/>
+                    <reference type="check" id="chk_secondoutboundims_is_unknown"/>
+                    <reference type="check" id="chk_secondoutboundacs_is_unknown"/>
+                    <reference type="check" id="chk_passwordims_is_unknown"/>
+                    <reference type="check" id="chk_primaryoutboundims_is_unknown"/>
+                    <reference type="check" id="chk_usernameacs_is_unknown"/>
+                    <reference type="check" id="chk_primaryoutboundacs_is_unknown"/>
+                    <reference type="check" id="chk_serveracs_is_unknown"/>
+                    <reference type="check" id="chk_operatoracs_is_unknown"/>
+                    <reference type="check" id="chk_serverims_is_unknown"/>
+                    <reference type="check" id="chk_operatorims_is_unknown"/>
+                </expr>
+            </expr>
+        </test>
+
+        <test id="tst_checkradius_wa">
+            <expr type="and">
+                <reference type="check" id="chk_checkradius_wa"/>
+            </expr>
+        </test>
+        <test id="tst_reconfiguresip_wa">
+            <expr type="and">
+                <reference type="check" id="chk_reconfiguresip_wa"/>
+            </expr>
+        </test>
+        <test id="tst_setproperties_wa">
+            <expr type="and">
+                <reference type="check" id="chk_setproperties_wa"/>
+            </expr>
+        </test>
+
+        <test id="tst_buzon_voz_is_enabled">
+            <expr type="and">
+                <reference type="check" id="chk_svas_table_display_buzon_voz_eq_activado"/>
+            </expr>
+        </test>
+
+        <test id="tst_desvio_si_no_contesta_is_disabled">
+            <expr type="and">
+                <reference type="check" id="chk_svas_table_display_desvio_si_no_contesta_eq_desactivado"/>
+            </expr>
+        </test>
+
+        <test id="tst_desvio_incondicional_is_disabled">
+            <expr type="and">
+                <reference type="check" id="chk_svas_table_display_desvio_incondicional_eq_desactivado"/>
+            </expr>
+        </test>
+
+        <test id="tst_desvio_si_ocupado_is_disabled">
+            <expr type="and">
+                <reference type="check" id="chk_svas_table_display_desvio_si_ocupado_eq_desactivado"/>
+            </expr>
+        </test>
+
+        <test id="tst_cualquier_desvio_is_enabled">
+            <expr type="or">
+                <reference type="check" id="chk_svas_table_display_desvio_si_no_contesta_eq_desactivado" inverse="true"/>
+                <reference type="check" id="chk_svas_table_display_desvio_incondicional_eq_desactivado" inverse="true"/>
+                <reference type="check" id="chk_svas_table_display_desvio_si_ocupado_eq_desactivado" inverse="true"/>
+            </expr>
+        </test>
+
+        <test id="tst_desvio_incondicional_neq_desactivado">
+            <expr type="and">
+                <reference type="check" id="chk_sva_desvio_incondicional_neq_desactivado"/>
+            </expr>
+        </test>
+
+        <test id="tst_desvio_incondicional_eq_msisdn">
+            <expr type="and">
+                <reference type="check" id="chk_sva_desvio_incondicional_eq_msisdn"/>
+            </expr>
+        </test>
+
+	</tests>
+
+
+    <checks>
+        <check id="chk_checkradius_wa">
+            <parameter>par_checkradius_wa</parameter>
+            <result>
+                <expr type="and">
+                    <operation type="not_equal">
+                    <args><arg><value type="value">estevalornuncasevaadar</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+        <check id="chk_reconfiguresip_wa">
+            <parameter>par_reconfiguresip_wa</parameter>
+            <result>
+                <expr type="and">
+                    <operation type="not_equal">
+                    <args><arg><value type="value">estevalornuncasevaadar</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+        <check id="chk_setproperties_wa">
+            <parameter>par_setproperties_wa</parameter>
+            <result>
+                <expr type="and">
+                    <operation type="not_equal">
+                    <args><arg><value type="value">estevalornuncasevaadar</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+
+        <check id="chk_http_code_ok">
+        	<parameter>par_http_code</parameter>
+        	<result>
+        		<expr type="and">                
+                    <operation type="equal">
+                	<args><arg><value type="value">200</value></arg></args>
+                </operation>
+
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_http_code_ko">
+            <parameter>par_http_code</parameter>
+            <result>
+                <expr type="and">                
+                    <operation type="not_equal">
+                    <args><arg><value type="value">200</value></arg></args>
+                </operation>
+
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_errcode_ok">
+            <parameter>par_errcode</parameter>
+            <result>
+                <expr type="and">                
+                    <operation type="equal">
+                    <args><arg><value type="value">0</value></arg></args>
+                </operation>
+            </expr>
+            </result>            
+        </check>
+
+        <check id="chk_errcode_ko">
+            <parameter>par_errcode</parameter>
+            <result>
+                <expr type="and">                
+                    <operation type="not_equal">
+                    <args><arg><value type="value">0</value></arg></args>
+                </operation>
+            </expr>
+            </result>            
+        </check>
+
+        <check id="chk_ims_ws_timeout">
+        	<parameter>par_errcode</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="equal">
+                	<args><arg><value type="value">9</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_ims_ws_othererror">
+        	<parameter>par_errcode</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="equal">
+                	<args><arg><value type="value">11</value></arg></args>
+                </operation>
+                </expr>
+        	</result>
+        </check>
+
+        <check id="chk_xena_status_ok">
+        	<parameter>par_xena_status</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="equal">
+                	<args><arg><value type="value">A</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_exists_ims">
+        	<parameter>par_exists_ims</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="equal">
+                	<args><arg><value type="value">ERICSSON</value></arg></args>
+                </operation>
+
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_voiceconfig_ko">
+        	<parameter>par_voiceconfig_code_error</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="not_equal">
+                	<args><arg><value type="value">200</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_sip_password_status_ok">
+        	<parameter>par_sip_password_status</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="equal">
+                	<args><arg><value type="value">1</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_prov_code_notspaced">
+        	<parameter>par_prov_code</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="not_contains">
+                	<args><arg><value type="value">^ $</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_cpe_registered">
+        	<parameter>par_cpe_registered</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="equal">
+                	<args><arg><value type="value">REGISTERED</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_cpe_registered_ko">
+            <parameter>par_cpe_registered</parameter>
+            <result>
+                <expr type="or">
+                <operation type="equal">
+                    <args><arg><value type="value">NOT_REGISTERED</value></arg></args>
+                </operation>
+                <operation type="equal">
+                    <args><arg><value type="value">UNREGISTERED</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_operator_acs_vs_ims">
+        	<parameter>par_operator_acs</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="equal">
+                	<args><arg><value type="parameter">par_operator_ims</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_primary_outbound_acs_vs_ims">
+        	<parameter>par_primary_outbound_acs</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="equal">
+                	<args><arg><value type="parameter">par_primary_outbound_ims</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_secondary_outbound_acs_vs_ims">
+        	<parameter>par_secondary_outbound_acs</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="equal">
+                	<args><arg><value type="parameter">par_secondary_outbound_ims</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_registrar_server_acs_vs_ims">
+        	<parameter>par_registrar_server_acs</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="equal">
+                	<args><arg><value type="parameter">par_registrar_server_ims</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_sip_username_acs_vs_ims">
+        	<parameter>par_sip_username_acs</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="equal">
+                	<args><arg><value type="parameter">par_sip_username_ims</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_sip_password_acs_vs_ims">
+            <parameter>par_sip_password_acs</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="parameter">par_sip_password_ims</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_ims_svas_httpcode_ok">
+        	<parameter>par_ims_estado_svas_error</parameter>
+        	<result>
+        		<expr type="and">
+            <operation type="equal">
+            	<args><arg><value type="value">200</value></arg></args>
+            </operation>
+        </expr>
+        	</result>
+        </check>
+
+        <check id="chk_ims_svas_http_errorcode_ko">
+        	<parameter>par_ims_estado_svas_error</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="not_equal">
+                	<args><arg><value type="value">200</value></arg></args>
+                </operation>
+            </expr>
+        	</result>               
+        </check>
+        <check id="chk_ims_estado_svas_desvios_activo">
+        	<parameter>par_ims_estado_svas_forwarding_active</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="greater">
+                	<args><arg><value type="value">0</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_ims_estado_svas_bloqueo_activo">
+        	<parameter>par_ims_estado_svas_other_active</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="greater">
+                	<args><arg><value type="value">0</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_ims_estado_svas_bloqueo_duro_activo">
+        	<parameter>par_ims_estado_svas_hardblock_active</parameter>
+        	<result>
+        		<expr type="and">
+                <operation type="greater">
+                	<args><arg><value type="value">0</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <check id="chk_portability">
+        	<parameter>par_portability</parameter>
+        	<result>
+        		<expr type="or">
+                <operation type="contains">
+                	<args><arg><value type="value">Xtra</value></arg></args>
+                </operation>
+                <operation type="contains">
+                	<args><arg><value type="value">Ibercom</value></arg></args>
+                </operation>
+                <operation type="contains">
+                	<args><arg><value type="value">NEO</value></arg></args>
+                </operation>
+                <operation type="contains">
+                	<args><arg><value type="value">Nunca portado</value></arg></args>
+                </operation>
+                <operation type="contains">
+                	<args><arg><value type="value">EMBOU</value></arg></args>
+                </operation>
+                <operation type="contains">
+                    <args><arg><value type="value">No se han encontrado datos de la portabilidad</value></arg></args>
+                </operation>
+            </expr>
+        	</result>
+        </check>
+
+        <!-- Checks info parcial getfixed config -->
+        <check id="chk_passwordacs_is_unknown">
+            <parameter>par_sip_password_acs</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_portability_is_unknown">
+            <parameter>par_portability</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_registered_is_unknown">
+            <parameter>par_cpe_registered</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_secondoutboundims_is_unknown">
+            <parameter>par_secondary_outbound_ims</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_secondoutboundacs_is_unknown">
+            <parameter>par_secondary_outbound_acs</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_passwordims_is_unknown">
+            <parameter>par_sip_password_ims</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_primaryoutboundims_is_unknown">
+            <parameter>par_primary_outbound_ims</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+
+        <check id="chk_usernameacs_is_unknown">
+            <parameter>par_sip_username_acs</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_primaryoutboundacs_is_unknown">
+            <parameter>par_primary_outbound_acs</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_provcode_is_unknown">
+            <parameter>par_prov_code</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_serveracs_is_unknown">
+            <parameter>par_registrar_server_acs</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_passwordstatus_is_unknown">
+            <parameter>par_sip_password_status</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_operatoracs_is_unknown">
+            <parameter>par_operator_acs</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_operatorims_is_unknown">
+            <parameter>par_operator_ims</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_serverims_is_unknown">
+            <parameter>par_registrar_server_ims</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_exists_is_unknown">
+            <parameter>par_exists_ims</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">unknown</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_svas_table_display_buzon_voz_eq_activado">
+            <parameter>par_svas_table_display_buzon_voz</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">Activado</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_svas_table_display_desvio_si_no_contesta_eq_desactivado">
+            <parameter>par_svas_table_display_desvio_si_no_contesta</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">Desactivado</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_svas_table_display_desvio_incondicional_eq_desactivado">
+            <parameter>par_svas_table_display_desvio_incondicional</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">Desactivado</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_svas_table_display_desvio_si_ocupado_eq_desactivado">
+            <parameter>par_svas_table_display_desvio_si_ocupado</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">Desactivado</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_get_sva_config_block_and_forward_code">
+            <parameter>par_get_sva_config_block_and_forward_code</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">200</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_get_sva_configuration_code">
+            <parameter>par_get_sva_configuration_code</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="value">200</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_sva_desvio_incondicional_neq_desactivado">
+            <parameter>par_svas_desvio_incondicional_valor</parameter>
+            <result>
+                <expr type="and">
+                <operation type="not_equal">
+                    <args><arg><value type="value">Desactivado</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+        <check id="chk_sva_desvio_incondicional_eq_msisdn">
+            <parameter>par_svas_desvio_incondicional_valor</parameter>
+            <result>
+                <expr type="and">
+                <operation type="equal">
+                    <args><arg><value type="parameter" role="front">par_input_msisdn</value></arg></args>
+                </operation>
+            </expr>
+            </result>
+        </check>
+
+    </checks>
+
+    <actions>
+        <!-- Incluimos acciones acs en este role para salvar escenarios sin gestión previa (por ejemplo PID) -->
+        <action id="act_acs_checkradius" type="button">
+            <texts>
+                <text type="detail">Consulta RADIUS</text>
+                <text type="ok">La consulta se ha realizado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="acs" datalinkid="checkradius">
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_acs_reconfiguresip" type="button">
+            <texts>
+                <text type="detail">Reconfiguración SIP</text>
+                <text type="ok">La acción se ha realizado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="acs" datalinkid="reconfiguresip">
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_wait" type="button">
+            <texts>
+            </texts>
+            <arguments>
+            </arguments>
+            <sequence>
+                <step type="wait" time="5000">
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_acs_ims_setproperties" type="button">
+            <texts>
+                <text type="detail">Forzar Alineamiento IMS vs ACS</text>
+                <text type="ok">La acción se ha realizado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="acs" datalinkid="setproperties">
+                </step>
+            </sequence>
+        </action>
+
+
+
+        <action id="act_VMEnabled_enable" type="button">
+            <texts>
+                <text type="detail">Activar Buzón de Voz</text>
+                <text type="warning">Vas a activar el servicio Buzón de Voz en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">VMEnabled</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+            <messages>
+                <message id="msg_ok" severity="info" datatype="text">
+                    <body><value type="value">El buzón de Voz se ha activado correctamente.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_configuration_code"/>
+                        </expr>
+                    </requirement>
+                </message>
+                <message id="msg_ko" severity="info" datatype="text">
+                    <body><value type="value">Ha habido algún problema al activar el buzón de Voz.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_configuration_code" inverse="true"/>
+                        </expr>
+                    </requirement>
+                </message>
+            </messages>
+        </action>
+
+        <action id="act_VMEnabled_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar Buzón de Voz</text>
+                <text type="warning">Vas a desactivar el servicio Buzón de Voz en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">VMEnabled</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+            <!--<messages>
+            </messages> -->
+        </action>
+
+        <action id="act_MobileBlock_enable" type="button">
+            <texts>
+                <text type="detail">Activar Bloqueo a Móviles</text>
+                <text type="warning">Vas a activar el servicio Bloqueo a móviles en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">MobileBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_MobileBlock_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar Bloqueo a Móviles</text>
+                <text type="warning">Vas a desactivar el servicio Bloqueo a móviles en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">MobileBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_CallWaiting_enable" type="button">
+            <texts>
+                <text type="detail">Activar Llamada en Espera</text>
+                <text type="warning">Vas a activar el servicio Llamada en espera en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">CallWaiting</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_CallWaiting_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar Llamada en Espera</text>
+                <text type="warning">Vas a desactivar el servicio Llamada en espera en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">CallWaiting</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_AnonymousCallNumBlock_enable" type="button">
+            <texts>
+                <text type="detail">Activar Bloqueo de Llamadas Anónimas</text>
+                <text type="warning">Vas a activar el servicio Bloqueo de Llamadas Anónimas en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">AnonymousCallNumBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_AnonymousCallNumBlock_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar Bloqueo de Llamadas Anónimas</text>
+                <text type="warning">Vas a desactivar el servicio Bloqueo de Llamadas anónimas en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">AnonymousCallNumBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_DoNotDisturb_enable" type="button">
+            <texts>
+                <text type="detail">Activar No molestar</text>
+                <text type="warning">Vas a activar el servicio No molestar en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">DoNotDisturb</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_DoNotDisturb_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar No molestar</text>
+                <text type="warning">Vas a desactivar el servicio No molestar en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">DoNotDisturb</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_OutgoingAnonymous_enable" type="button">
+            <texts>
+                <text type="detail">Activar Permitir Llamada Anónima</text>
+                <text type="warning">Vas a activar el servicio Permitir Llamada Anónima en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">OutgoingAnonymous</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_OutgoingAnonymous_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar Permitir Llamada Anónima</text>
+                <text type="warning">Vas a desactivar el servicio Permitir Llamada Anónima en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">OutgoingAnonymous</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_CallScreen_enable" type="button">
+            <texts>
+                <text type="detail">Activar Identificación de llamadas</text>
+                <text type="warning">Vas a activar el servicio Identificación de llamadas en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">CallScreen</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_CallScreen_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar Identificación de llamadas</text>
+                <text type="warning">Vas a desactivar el servicio Identificación de llamadas en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">CallScreen</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_InternationalBlock_enable" type="button">
+            <texts>
+                <text type="detail">Activar Bloqueo internacional</text>
+                <text type="warning">Vas a activar el servicio Bloqueo internacional en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">InternationalBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_InternationalBlock_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar Bloqueo internacional</text>
+                <text type="warning">Vas a desactivar el servicio Bloqueo internacional en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">InternationalBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_PremiumRateBlock_enable" type="button">
+            <texts>
+                <text type="detail">Activar Bloqueo tarificación adicional</text>
+                <text type="warning">Vas a activar el servicio Bloqueo tarificación adicional en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">PremiumRateBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_PremiumRateBlock_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar Bloqueo tarificación adicional</text>
+                <text type="warning">Vas a desactivar el servicio Bloqueo tarificación adicional en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">PremiumRateBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_FixBlock_enable" type="button">
+            <texts>
+                <text type="detail">Activar Bloqueo a fijos</text>
+                <text type="warning">Vas a activar el servicio Bloqueo a fijos en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">FixBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_FixBlock_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar Bloqueo a fijos</text>
+                <text type="warning">Vas a desactivar el servicio Bloqueo a fijos en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">FixBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_CallForwardNoanswer_enable" type="button">
+            <texts>
+                <text type="detail">Activar Desvío si no contesta</text>
+                <text type="warning">Para activar el desvío configura primero los valores y pulsa sobre el icono de guardar, gracias.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+        </action>
+
+        <action id="act_CallForwardNoanswer_setvalue" type="config">
+            <texts>
+                <text type="detail">Activar Desvío si no contesta</text>
+                <text type="warning">Vas a activar el servicio Desvío si no contesta en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <inputs>
+                <input id="input_1" type="list">
+                    <text><value type="value">Servicio al que se desviarán las llamadas:</value></text>
+                    <default><value type="value">Telefono</value></default>
+                    <valuelist>
+                        <value>Telefono</value>
+                    </valuelist>
+                </input>
+                <input id="service_value" type="text">
+                    <text><value type="value">Numero:</value></text>
+                    <default><value type="parameter">par_CallForwardNoanswer_list</value></default>
+                    <minlengths><minlength><value>8</value></minlength></minlengths>
+                    <maxlengths><maxlength><value>10</value></maxlength></maxlengths>
+                </input>
+            </inputs>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">CallForwardNoanswer</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration_block_and_forward">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="service_value">
+                            <value type="input">service_value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+            <messages>
+                <message id="msg_ok" severity="info" datatype="text">
+                    <body><value type="value">El SVA se ha configurado correctamente.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_config_block_and_forward_code"/>
+                        </expr>
+                    </requirement>
+                </message>
+                <message id="msg_ko" severity="info" datatype="text">
+                    <body><value type="value">Ha habido algún problema en la configuración del SVA.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_config_block_and_forward_code" inverse="true"/>
+                        </expr>
+                    </requirement>
+                </message>
+            </messages>
+        </action>
+
+        <action id="act_CallForwardNoanswer_setvalue_tut" type="config">
+            <texts>
+                <text type="detail">Activar Desvío si no contesta</text>
+                <text type="warning">Vas a activar el servicio Desvío si no contesta en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <inputs>
+                <input id="service_value" type="text">
+                    <text><value type="value">Numero:</value></text>
+                    <default><value type="parameter">par_CallForwardNoanswer_list</value></default>
+                    <minlengths><minlength><value>8</value></minlength></minlengths>
+                    <maxlengths><maxlength><value>10</value></maxlength></maxlengths>
+                </input>
+            </inputs>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">CallForwardNoanswer</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration_block_and_forward">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="service_value">
+                            <value type="input">service_value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+            <messages>
+                <message id="msg_ok" severity="info" datatype="text">
+                    <body><value type="value">El SVA se ha configurado correctamente.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_config_block_and_forward_code"/>
+                        </expr>
+                    </requirement>
+                </message>
+                <message id="msg_ko" severity="info" datatype="text">
+                    <body><value type="value">Ha habido algún problema en la configuración del SVA.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_config_block_and_forward_code" inverse="true"/>
+                        </expr>
+                    </requirement>
+                </message>
+            </messages>
+        </action>
+
+        <action id="act_CallForwardNoanswer_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar Desvío si no contesta</text>
+                <text type="warning">Vas a desactivar el servicio Desvío si no contesta en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">CallForwardNoanswer</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_CallForwardInconditional_enable" type="button">
+            <texts>
+                <text type="detail">Activar Desvío incondicional</text>
+                <text type="warning">Para activar el desvío configura primero los valores y pulsa sobre el icono de guardar, gracias.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+        </action>
+
+        <action id="act_CallForwardInconditional_setvalue" type="config">
+            <texts>
+                <text type="detail">Activar Desvío incondicional</text>
+                <text type="warning">Vas a activar el servicio Desvío incondicional en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <inputs>
+                <input id="input_1" type="list">
+                    <text><value type="value">Servicio al que se desviarán las llamadas:</value></text>
+                    <default><value type="value">Telefono</value></default>
+                    <valuelist>
+                        <value>Telefono</value>
+                    </valuelist>
+                </input>
+                <input id="service_value" type="text">
+                    <text><value type="value">Numero:</value></text>
+                    <default><value type="parameter">par_CallForwardInconditional_list</value></default>
+                    <minlengths><minlength><value>8</value></minlength></minlengths>
+                    <maxlengths><maxlength><value>10</value></maxlength></maxlengths>
+                </input>
+            </inputs>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">CallForwardInconditional</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration_block_and_forward">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="service_value">
+                            <value type="input">service_value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+            <messages>
+                <message id="msg_ok" severity="info" datatype="text">
+                    <body><value type="value">El SVA se ha configurado correctamente.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_config_block_and_forward_code"/>
+                        </expr>
+                    </requirement>
+                </message>
+                <message id="msg_ko" severity="info" datatype="text">
+                    <body><value type="value">Ha habido algún problema en la configuración del SVA.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_config_block_and_forward_code" inverse="true"/>
+                        </expr>
+                    </requirement>
+                </message>
+            </messages>
+        </action>
+
+        <action id="act_CallForwardInconditional_setvalue_tut" type="config">
+            <texts>
+                <text type="detail">Activar Desvío incondicional</text>
+                <text type="warning">Vas a activar el servicio Desvío incondicional en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <inputs>
+                <input id="service_value" type="text">
+                    <text><value type="value">Numero:</value></text>
+                    <default><value type="parameter">par_CallForwardInconditional_list</value></default>
+                    <minlengths><minlength><value>8</value></minlength></minlengths>
+                    <maxlengths><maxlength><value>10</value></maxlength></maxlengths>
+                </input>
+            </inputs>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">CallForwardInconditional</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration_block_and_forward">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="service_value">
+                            <value type="input">service_value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+            <messages>
+                <message id="msg_ok" severity="info" datatype="text">
+                    <body><value type="value">El SVA se ha configurado correctamente.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_config_block_and_forward_code"/>
+                        </expr>
+                    </requirement>
+                </message>
+                <message id="msg_ko" severity="info" datatype="text">
+                    <body><value type="value">Ha habido algún problema en la configuración del SVA.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_config_block_and_forward_code" inverse="true"/>
+                        </expr>
+                    </requirement>
+                </message>
+            </messages>
+        </action>
+
+        <action id="act_CallForwardInconditional_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar Desvío incondicional</text>
+                <text type="warning">Vas a desactivar el servicio Desvío incondicional en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">CallForwardInconditional</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_CallForwardBusy_enable" type="button">
+            <texts>
+                <text type="detail">Activar Desvío si ocupado</text>
+                <text type="warning">Para activar el desvío configura primero los valores y pulsa sobre el icono de guardar, gracias.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+
+        </action>
+
+        <action id="act_CallForwardBusy_setvalue" type="config">
+            <texts>
+                <text type="detail">Activar Desvío si ocupado</text>
+                <text type="warning">Vas a activar el servicio Desvío si ocupado en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+
+            <inputs>
+                <input id="input_1" type="list">
+                    <text><value type="value">Servicio al que se desviarán las llamadas:</value></text>
+                    <default><value type="value">Telefono</value></default>
+                    <valuelist>
+                        <value>Telefono</value>
+                    </valuelist>
+                </input>
+                <input id="service_value" type="text">
+                    <text><value type="value">Numero:</value></text>
+                    <default><value type="parameter">par_CallForwardBusy_list</value></default>
+                    <minlengths><minlength><value>8</value></minlength></minlengths>
+                    <maxlengths><maxlength><value>10</value></maxlength></maxlengths>
+                </input>
+            </inputs>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">CallForwardBusy</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration_block_and_forward">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="service_value">
+                            <value type="input">service_value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+            <messages>
+                <message id="msg_ok" severity="info" datatype="text">
+                    <body><value type="value">El SVA se ha configurado correctamente.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_config_block_and_forward_code"/>
+                        </expr>
+                    </requirement>
+                </message>
+                <message id="msg_ko" severity="info" datatype="text">
+                    <body><value type="value">Ha habido algún problema en la configuración del SVA.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_config_block_and_forward_code" inverse="true"/>
+                        </expr>
+                    </requirement>
+                </message>
+            </messages>
+        </action>
+
+        <action id="act_CallForwardBusy_setvalue_tut" type="config">
+            <texts>
+                <text type="detail">Activar Desvío si ocupado</text>
+                <text type="warning">Vas a activar el servicio Desvío si ocupado en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <inputs>
+                <input id="service_value" type="text">
+                    <text><value type="value">Numero:</value></text>
+                    <default><value type="parameter">par_CallForwardBusy_list</value></default>
+                    <minlengths><minlength><value>8</value></minlength></minlengths>
+                    <maxlengths><maxlength><value>10</value></maxlength></maxlengths>
+                </input>
+            </inputs>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">CallForwardBusy</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration_block_and_forward">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="service_value">
+                            <value type="input">service_value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+            <messages>
+                <message id="msg_ok" severity="info" datatype="text">
+                    <body><value type="value">El SVA se ha configurado correctamente.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_config_block_and_forward_code"/>
+                        </expr>
+                    </requirement>
+                </message>
+                <message id="msg_ko" severity="info" datatype="text">
+                    <body><value type="value">Ha habido algún problema en la configuración del SVA.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_config_block_and_forward_code" inverse="true"/>
+                        </expr>
+                    </requirement>
+                </message>
+            </messages>
+        </action>
+
+        <action id="act_CallForwardBusy_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar Desvío si ocupado</text>
+                <text type="warning">Vas a desactivar el servicio Desvío si ocupado en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">CallForwardBusy</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_OutgoingCallNumBlock_enable" type="button">
+            <texts>
+                <text type="detail">Activar Bloqueo Salientes a Numeros concretos</text>
+                <text type="warning">Para activar el servicio introduce primero los valores y pulsa sobre el icono de guardar, gracias.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+        </action>
+
+        <action id="act_OutgoingCallNumBlock_setvalue" type="config">
+            <texts>
+                <text type="detail">Activar Bloqueo salientes</text>
+                <text type="warning">Vas a activar el servicio Bloqueo salientes en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <inputs>
+                <input id="input_add_exclude" type="editablelist">
+                    <text><value type="value">Servicios a Incluir en lista de Bloqueo:</value></text>
+                    <valuelistoptions>
+                    <value type="parameter">par_OutgoingCallNumBlock_list</value>
+                  </valuelistoptions>
+                </input>
+            </inputs>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">OutgoingCallNumBlock</value>
+                </argument>
+                <argument id="option">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_list_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg loopid="input_ob_list" argid="list">
+                             <value type="input" editablelistvaluetype="finalvalues">input_add_exclude</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_OutgoingCallNumBlock_disable" type="config">
+            <texts>
+                <text type="detail">Desactivar Bloqueo salientes</text>
+                <text type="warning">Vas a desactivar el servicio Bloqueo salientes en el servicio de Telefonía Fija del cliente. Esta acción borrará todos los valores que hayan actualmente en la lista</text>
+                <text type="ok">El servicio se ha desactivado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">OutgoingCallNumBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_IncomingCallNumBlock_enable" type="button">
+            <texts>
+                <text type="detail">Activar Bloqueo Entrantes de Numeros concretos</text>
+                <text type="warning">Para activar el servicio introduce primero los valores y pulsa sobre el icono de guardar, gracias.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+        </action>
+
+        <action id="act_IncomingCallNumBlock_setvalue" type="button">
+            <texts>
+                <text type="detail">Activar Bloqueo entrantes</text>
+                <text type="warning">Vas a activar el servicio Bloqueo entrantes en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <inputs>
+                <input id="input_add_exclude" type="editablelist">
+                    <text><value type="value">Servicios a Incluir en lista de Bloqueo:</value></text>
+                    <valuelistoptions>
+                        <value type="parameter">par_IncomingCallNumBlock_list</value>
+                    </valuelistoptions>
+                </input>
+            </inputs>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">IncomingCallNumBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_list_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg loopid="input_ob_list" argid="list">
+                             <value type="input" editablelistvaluetype="finalvalues">input_add_exclude</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_IncomingCallNumBlock_disable" type="config">
+            <texts>
+                <text type="detail">Desactivar Bloqueo entrantes</text>
+                <text type="warning">Vas a desactivar el servicio Bloqueo entrantes en el servicio de Telefonía Fija del cliente. Esta acción borrará la lista de números por completo.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">IncomingCallNumBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        
+        <!-- SCHA-3258 -->
+        <!-- <action id="act_TemporaryBlock_enable" type="config">
+            <texts>
+                <text type="detail">Activar Bloqueo Temporal por Fraude</text>
+                <text type="warning">Vas a activar el servicio Bloqueo Temporal por Fraude en el servicio de Telefonía Fija del cliente. </text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">TemporaryBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+            <messages>
+                <message id="msg_ok" severity="info" datatype="text">
+                    <body><value type="value">El Bloqueo Temporal por Fraude se ha activado correctamente.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_configuration_code"/>
+                        </expr>
+                    </requirement>
+                </message>
+                <message id="msg_ko" severity="info" datatype="text">
+                    <body><value type="value">Ha habido algún problema al activar el Bloqueo Temporal por Fraude ya que tiene otros bloqueos y/o desvíos activos.</value></body>
+                    <requirement>
+                        <expr type="and">
+                            <reference type="check" id="chk_get_sva_configuration_code" inverse="true"/>
+                        </expr>
+                    </requirement>
+                </message>
+            </messages>
+        </action>
+
+        <action id="act_TemporaryBlock_disable" type="config">
+            <texts>
+                <text type="detail">Desactivar Bloqueo Temporal por Fraude</text>
+                <text type="warning">Vas a desactivar el servicio Bloqueo Temporal por Fraude en el servicio de Telefonía Fija del cliente. </text>
+                <text type="ok">El servicio se ha desactivado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">TemporaryBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_DefaultBlock_enable" type="button">
+            <texts>
+                <text type="detail">Activar Bloqueo financiero</text>
+                <text type="warning">Vas a activar el servicio Bloqueo financiero en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">DefaultBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">1</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action>
+
+        <action id="act_DefaultBlock_disable" type="button">
+            <texts>
+                <text type="detail">Desactivar Bloqueo financiero</text>
+                <text type="warning">Vas a desactivar el servicio Bloqueo financiero en el servicio de Telefonía Fija del cliente.</text>
+                <text type="ok">El servicio se ha activado correctamente.</text>
+                <text type="error">Ha habido un problema para aplicar los cambios, por favor inténtalo de nuevo pasados unos minutos</text>
+            </texts>
+            <arguments>
+                <argument id="sva_service_configuration">
+                    <value type="value">DefaultBlock</value>
+                </argument>
+                <argument id="value">
+                    <value type="value">0</value>
+                </argument>
+            </arguments>
+            <sequence>
+                <step type="infosource" infosource="ims" endpointid="set_sva_configuration">
+                    <args>
+                        <arg argid="sva_service_configuration">
+                            <value type="argument">sva_service_configuration</value>
+                        </arg>
+                        <arg argid="value">
+                            <value type="argument">value</value>
+                        </arg>
+                    </args>
+                </step>
+            </sequence>
+        </action> -->
+        <!-- SCHA-3258 -->
+
+    </actions>
+	
+</template>

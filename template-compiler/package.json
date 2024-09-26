@@ -1,0 +1,15 @@
+{
+  "name": "template-compiler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "template-compiler.js",
+  "scripts": {
+    "start": "node template-compiler.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "glob": "^11.0.0",
+    "jsdom": "^25.0.1"
+  }
+}
